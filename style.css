@@ -1,0 +1,159 @@
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+
+:root {
+  --blue-theme-color: #87ceeb;
+  --blue-border-color: #4682b4;
+  --yellow-theme-color: #ffec99;
+  --yellow-border-color: #e6b800;
+  --bg-color: #f0f8ff;
+  --text-color: #333;
+}
+
+body {
+  font-family: "Patrick Hand", cursive, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 20px;
+}
+
+.main-title {
+  font-size: 3rem;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.game-container {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 40px;
+}
+
+.board-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board-title {
+  padding: 10px 30px;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 0;
+  width: fit-content;
+  border: 2px solid transparent;
+  font-size: 1.5rem;
+}
+
+/* Theme-specific styles */
+.blue-theme .board-title {
+  background-color: var(--blue-theme-color);
+  border-color: var(--blue-border-color);
+}
+
+.blue-theme .grid-container {
+  border: 3px solid var(--blue-border-color);
+}
+
+.blue-theme .label-cell {
+  background-color: var(--blue-theme-color);
+}
+
+.yellow-theme .board-title {
+  background-color: var(--yellow-theme-color);
+  border-color: var(--yellow-border-color);
+}
+
+.yellow-theme .grid-container {
+  border: 3px solid var(--yellow-border-color);
+}
+
+.yellow-theme .label-cell {
+  background-color: var(--yellow-theme-color);
+}
+
+/* Grid Styles */
+.grid-container {
+  display: grid;
+  /* 11x11 grid: 1 row/col for labels + 10 for game cells */
+  grid-template-columns: repeat(11, 35px);
+  grid-template-rows: repeat(11, 35px);
+  background-color: white;
+}
+
+.cell {
+  width: 35px;
+  height: 35px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+.label-cell {
+  font-weight: bold;
+}
+
+.empty-cell {
+  border: none;
+  background-color: transparent;
+}
+
+.game-cell {
+  cursor: pointer;
+  background-color: white;
+}
+.game-cell:hover {
+  background-color: #f0f0f0;
+}
+
+/* Legend Styles */
+.legend {
+  display: flex;
+  gap: 40px;
+  font-size: 1.2rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-marker {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.water-marker {
+  background-color: #4169e1;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}
+
+.hit-marker {
+  color: red;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.boats-marker {
+  font-weight: bold;
+  letter-spacing: 5px;
+  width: auto;
+}
+
+.miss-marker {
+  background-color: #d3d3d3; /* Light grey */
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}

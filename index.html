@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Battleship Game</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <h1 class="main-title">Battleship</h1>
+
+    <div class="game-container">
+      <div class="board-section blue-theme">
+        <h2 class="board-title">My grid :</h2>
+        <div id="player-grid" class="grid-container"></div>
+      </div>
+
+      <div class="board-section yellow-theme">
+        <h2 class="board-title">Opposing grid:</h2>
+        <div id="opponent-grid" class="grid-container"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <!-- <div class="legend-item">
+        <div class="legend-marker water-marker"></div>
+        <span>In the water</span>
+      </div> -->
+      <div class="legend-item">
+        <div class="legend-marker hit-marker">✖</div>
+        <span>Hit</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-marker miss-marker"></div>
+        <span>Miss</span>
+      </div>
+
+      <!-- <div class="legend-item">
+        <div class="legend-marker boats-marker">● ● ● ● ●</div>
+        <span>My boats</span>
+      </div> -->
+    </div>
+  </body>
 </html>
