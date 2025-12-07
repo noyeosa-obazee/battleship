@@ -39,6 +39,7 @@ body {
   align-items: center;
   margin-bottom: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .input-group {
@@ -66,7 +67,44 @@ input {
   border-radius: 8px;
   background-color: #fafafa;
 }
+/* Add this class to make the input border red when wrong */
+.input-invalid {
+  border-color: #ff4444 !important;
+  background-color: #fff0f0 !important;
+  animation: shake 0.3s;
+}
 
+/* The error text style */
+.error-msg {
+  color: #ff4444;
+  font-size: 0.9rem;
+  font-weight: bold;
+  min-height: 1.2rem; /* Keeps space so layout doesn't jump */
+  margin-top: 5px;
+}
+
+#coord-error {
+  display: none;
+}
+
+/* A cool "Shake" animation */
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
 input {
   width: 60px; /* Small width for A1 inputs */
   text-align: center;
