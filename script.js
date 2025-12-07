@@ -6,6 +6,7 @@ const ship = document.getElementById("ship-select");
 const startBtn = document.getElementById("start-btn");
 const controlsContainer = document.querySelector(".controls-container");
 import { Gameboard, Player } from "./classes.js";
+import { allCoords } from "./allCoords.js";
 
 const user = new Player("user");
 const computer = new Player("computer");
@@ -98,13 +99,11 @@ function computerPicksShips() {
     "submarine",
     "destroyer",
   ];
-  const coordinateOptions = getAllCoordinates();
 
   const orientationOptions = ["horizontal", "vertical"];
   for (let i = 0; i < 5; i++) {
     let ship = shipOptions[0];
-    let coordinate =
-      coordinateOptions[Math.floor(Math.random() * coordinateOptions.length)];
+    let coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
     let orientation =
       orientationOptions[Math.floor(Math.random() * orientationOptions.length)];
 
@@ -123,21 +122,6 @@ function computerPicksShips() {
     }
   }
   console.log(computer.gameboard.filledCoordinates);
-}
-
-function getAllCoordinates() {
-  const coords = [];
-  const rows = 10;
-  const cols = 10;
-
-  for (let i = 0; i < rows; i++) {
-    for (let j = 1; j <= cols; j++) {
-      // Convert 0 -> 'A', 1 -> 'B', etc.
-      const letter = String.fromCharCode(65 + i);
-      coords.push(`${letter}${j}`);
-    }
-  }
-  return coords;
 }
 
 // Optional: Clear error when user starts typing again
@@ -174,9 +158,15 @@ function createGrid(containerId) {
       else {
         cell.classList.add("game-cell");
 
+        cell.classList.add(containerId === "player-grid" ? "p-cell" : "c-cell");
+
         cell.id = `${String.fromCharCode(64 + i)}${j}`;
 
-        cell.addEventListener("click", () => console.log(cell.id));
+        cell.addEventListener("click", () => {
+          if (containerId === "opponent-grid") {
+            computer.gameboard.receiveAttack(cell.id);
+          }
+        });
       }
 
       gridContainer.appendChild(cell);

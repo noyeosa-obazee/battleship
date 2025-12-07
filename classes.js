@@ -299,14 +299,18 @@ class Gameboard {
     }
   }
 
-  receiveAttack(coordinateOne, coordinateTwo) {
-    //we'll check if coordinate one and coordinate two are equal to the coordinate one and coordinate two of any ship already placed on the grid
-    if (this.filledCoordinates.includes(`${coordinateOne}, ${coordinateTwo}`)) {
-      this.ship.hit();
+  receiveAttack(coordinate) {
+    if (this.filledCoordinates.includes(coordinate)) {
+      // this.ship.hit();
+      const hitCell = document.querySelector(`.c-cell#${coordinate}`);
+      hitCell.textContent = "✖";
+      hitCell.style.color = "red";
     } else {
-      this.missedShots.push(`${coordinateOne}, ${coordinateTwo}`);
+      this.missedShots.push(coordinate);
+      const missedCell = document.querySelector(`.c-cell#${coordinate}`);
+      missedCell.textContent = "m";
+      missedCell.style.color = "#d3d3d3";
     }
-    return this.ship.hits;
   }
 }
 
