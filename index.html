@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js" defer></script>
     <link rel="stylesheet" href="style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,13 +31,14 @@
       <div class="input-group">
         <label for="orientation-select">Orientation:</label>
         <select id="orientation-select">
-          <option value="horizontal">Horizontal</option>
+          <option value="horizontal" selected>Horizontal</option>
           <option value="vertical">Vertical</option>
         </select>
       </div>
 
       <button id="place-ship-btn">Place Ship</button>
     </div>
+    <button id="start-btn" disabled>Play</button>
     <div class="game-container">
       <div class="board-section blue-theme">
         <h2 class="board-title">My grid :</h2>
