@@ -10,7 +10,33 @@
   </head>
   <body>
     <h1 class="main-title">Battleship</h1>
+    <div class="controls-container">
+      <div class="input-group">
+        <label for="ship-select">Ship:</label>
+        <select id="ship-select">
+          <option value="carrier">Carrier (5 spaces)</option>
+          <option value="battleship">Battleship (4 spaces)</option>
+          <option value="cruiser">Cruiser (3 spaces)</option>
+          <option value="submarine">Submarine (3 spaces)</option>
+          <option value="destroyer">Destroyer (2 spaces)</option>
+        </select>
+      </div>
 
+      <div class="input-group">
+        <label for="coord-input">Coordinate (e.g. A1):</label>
+        <input type="text" id="coord-input" placeholder="A1" maxlength="3" />
+      </div>
+
+      <div class="input-group">
+        <label for="orientation-select">Orientation:</label>
+        <select id="orientation-select">
+          <option value="horizontal">Horizontal</option>
+          <option value="vertical">Vertical</option>
+        </select>
+      </div>
+
+      <button id="place-ship-btn">Place Ship</button>
+    </div>
     <div class="game-container">
       <div class="board-section blue-theme">
         <h2 class="board-title">My grid :</h2>

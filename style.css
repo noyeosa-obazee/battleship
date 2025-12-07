@@ -27,6 +27,76 @@ body {
   letter-spacing: 2px;
 }
 
+/* Add this after your .main-title styles */
+
+.controls-container {
+  background-color: white;
+  padding: 15px 30px;
+  border-radius: 15px;
+  border: 3px solid var(--blue-border-color);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-group label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--blue-border-color);
+}
+
+select {
+  cursor: pointer;
+}
+
+select,
+input {
+  font-family: "Patrick Hand", cursive, sans-serif;
+  font-size: 1em;
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+input {
+  width: 60px; /* Small width for A1 inputs */
+  text-align: center;
+  text-transform: uppercase; /* Forces A1 instead of a1 */
+}
+
+/* Button Styling */
+#place-ship-btn {
+  font-family: "Patrick Hand", cursive, sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  color: white;
+  background-color: var(--blue-border-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px; /* Aligns with inputs */
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#place-ship-btn:hover {
+  background-color: #36648b;
+  transform: scale(1.05);
+}
+
+#place-ship-btn:active {
+  transform: scale(0.95);
+}
+
 .game-container {
   display: flex;
   gap: 50px;
