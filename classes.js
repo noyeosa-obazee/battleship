@@ -322,37 +322,46 @@ class Gameboard {
 
   receiveAttack(coordinate) {
     if (this.player === "user") {
-      console.log(objectTargetKey(this.filledCoordinates, coordinate));
       if (
-        this.filledCoordinates[
-          objectTargetKey(this.filledCoordinates, coordinate)
-        ]
+        !document.querySelector(`.p-cell#${coordinate}`).textContent ||
+        document.querySelector(`.p-cell#${coordinate}`).textContent === "●"
       ) {
-        // this.ship.hit();
-        const hitCell = document.querySelector(`.p-cell#${coordinate}`);
-        hitCell.textContent = "✖";
-        hitCell.style.color = "red";
-      } else {
-        this.missedShots.push(coordinate);
-        const missedCell = document.querySelector(`.p-cell#${coordinate}`);
-        missedCell.textContent = "m";
-        missedCell.style.color = "#d3d3d3";
+        if (
+          this.filledCoordinates[
+            objectTargetKey(this.filledCoordinates, coordinate)
+          ]
+        ) {
+          // this.ship.hit();
+          const hitCell = document.querySelector(`.p-cell#${coordinate}`);
+          hitCell.textContent = "✖";
+          hitCell.style.color = "red";
+        } else {
+          this.missedShots.push(coordinate);
+          const missedCell = document.querySelector(`.p-cell#${coordinate}`);
+          missedCell.textContent = "m";
+          missedCell.style.color = "#d3d3d3";
+        }
       }
     } else {
       if (
-        this.filledCoordinates[
-          objectTargetKey(this.filledCoordinates, coordinate)
-        ]
+        !document.querySelector(`.c-cell#${coordinate}`).textContent ||
+        document.querySelector(`.c-cell#${coordinate}`).textContent === "●"
       ) {
-        // this.ship.hit();
-        const hitCell = document.querySelector(`.c-cell#${coordinate}`);
-        hitCell.textContent = "✖";
-        hitCell.style.color = "red";
-      } else {
-        this.missedShots.push(coordinate);
-        const missedCell = document.querySelector(`.c-cell#${coordinate}`);
-        missedCell.textContent = "m";
-        missedCell.style.color = "#d3d3d3";
+        if (
+          this.filledCoordinates[
+            objectTargetKey(this.filledCoordinates, coordinate)
+          ]
+        ) {
+          // this.ship.hit();
+          const hitCell = document.querySelector(`.c-cell#${coordinate}`);
+          hitCell.textContent = "✖";
+          hitCell.style.color = "red";
+        } else {
+          this.missedShots.push(coordinate);
+          const missedCell = document.querySelector(`.c-cell#${coordinate}`);
+          missedCell.textContent = "m";
+          missedCell.style.color = "#d3d3d3";
+        }
       }
     }
   }
