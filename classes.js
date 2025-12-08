@@ -326,15 +326,19 @@ class Gameboard {
         !document.querySelector(`.p-cell#${coordinate}`).textContent ||
         document.querySelector(`.p-cell#${coordinate}`).textContent === "●"
       ) {
-        if (
+        const targetShip =
           this.filledCoordinates[
             objectTargetKey(this.filledCoordinates, coordinate)
-          ]
-        ) {
-          // this.ship.hit();
+          ];
+        if (targetShip) {
+          targetShip.hit();
+          targetShip.isSunk();
           const hitCell = document.querySelector(`.p-cell#${coordinate}`);
           hitCell.textContent = "✖";
           hitCell.style.color = "red";
+          if (targetShip.hasBeenSunk) {
+            console.log(targetShip.type + " has been sunk");
+          }
         } else {
           this.missedShots.push(coordinate);
           const missedCell = document.querySelector(`.p-cell#${coordinate}`);
@@ -347,15 +351,19 @@ class Gameboard {
         !document.querySelector(`.c-cell#${coordinate}`).textContent ||
         document.querySelector(`.c-cell#${coordinate}`).textContent === "●"
       ) {
-        if (
+        const targetShip =
           this.filledCoordinates[
             objectTargetKey(this.filledCoordinates, coordinate)
-          ]
-        ) {
-          // this.ship.hit();
+          ];
+        if (targetShip) {
+          targetShip.hit();
+          targetShip.isSunk();
           const hitCell = document.querySelector(`.c-cell#${coordinate}`);
           hitCell.textContent = "✖";
           hitCell.style.color = "red";
+          if (targetShip.hasBeenSunk) {
+            console.log(targetShip.type + " has been sunk");
+          }
         } else {
           this.missedShots.push(coordinate);
           const missedCell = document.querySelector(`.c-cell#${coordinate}`);
