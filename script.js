@@ -89,7 +89,7 @@ function userPicksShips() {
     controlsContainer.classList.add("hidden-controls");
     ship.classList.add("vanish");
   }
-  computerPicksShips();
+
   // console.log(user.gameboard.filledCoordinates);
 }
 
@@ -131,6 +131,24 @@ function computerPicksShips() {
 // Optional: Clear error when user starts typing again
 coordInput.addEventListener("input", clearError);
 
+startBtn.addEventListener("click", () => {
+  computerPicksShips();
+  const userGameCells = [...document.querySelectorAll(".p-cell")];
+  const computerGameCells = [...document.querySelectorAll(".c-cell")];
+
+  for (const cell of userGameCells) {
+    cell.addEventListener("click", () => {
+      user.gameboard.receiveAttack(cell.id);
+    });
+  }
+
+  for (const cell of computerGameCells) {
+    cell.addEventListener("click", () => {
+      computer.gameboard.receiveAttack(cell.id);
+    });
+  }
+});
+
 // Function to create a 10x10 grid with labels
 function createGrid(containerId) {
   const gridContainer = document.getElementById(containerId);
@@ -165,14 +183,6 @@ function createGrid(containerId) {
         cell.classList.add(containerId === "player-grid" ? "p-cell" : "c-cell");
 
         cell.id = `${String.fromCharCode(64 + i)}${j}`;
-
-        cell.addEventListener("click", () => {
-          if (containerId === "opponent-grid") {
-            computer.gameboard.receiveAttack(cell.id);
-          } else {
-            user.gameboard.receiveAttack(cell.id);
-          }
-        });
       }
 
       gridContainer.appendChild(cell);
