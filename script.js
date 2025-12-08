@@ -5,11 +5,38 @@ const placeBtn = document.getElementById("place-ship-btn");
 const ship = document.getElementById("ship-select");
 const startBtn = document.getElementById("start-btn");
 const controlsContainer = document.querySelector(".controls-container");
-import { Gameboard, Player } from "./classes.js";
+import { Player } from "./classes.js";
 import { allCoords } from "./allCoords.js";
+
+const SHIP_LENGTHS = {
+  carrier: 5,
+  battleship: 4,
+  cruiser: 3,
+  submarine: 3,
+  destroyer: 2,
+};
+
+function isPlacementValid(shipName, coordinate, orientation) {
+  const length = SHIP_LENGTHS[shipName.toLowerCase()];
+
+  if (orientation === "horizontal") {
+    if (Number(coordinate.slice(1)) + length - 1 > 10) {
+      return false;
+    }
+  } else {
+    // Vertical Logic
+    const distance = "J".charCodeAt(0) - coordinate[0].charCodeAt(0);
+    if (distance + 1 < length) {
+      return false;
+    }
+  }
+  return true;
+}
 
 const user = new Player("user");
 const computer = new Player("computer");
+let turn = "user";
+let gameOver = false;
 // 1. The Validation Function
 function validateCoordinate(input) {
   const regex = /^[A-Ja-j](10|[1-9])$/;
@@ -58,30 +85,48 @@ function userPicksShips() {
     return;
   }
 
-  // Step C: If valid, proceed!
+  if (
+    !isPlacementValid(ship.value, rawInput.toUpperCase(), orientation.value)
+  ) {
+    showError(
+      `That ship is too long to fit there! (Length: ${
+        SHIP_LENGTHS[ship.value]
+      })`
+    );
+    return;
+  }
+
+  if (
+    Object.keys(user.gameboard.filledCoordinates)
+      .map((ship) => user.gameboard.filledCoordinates[ship].coords)
+      .some((arr) => arr.includes(rawInput.toUpperCase()))
+  ) {
+    showError("There is already a ship in this coordinate!");
+    return;
+  }
+
+  if (willBecomeTaken(ship.value, rawInput.toUpperCase(), orientation.value)) {
+    showError("Coordinate will conflict with that of another ship");
+    return;
+  }
+
+  // Step C: If its valid, proceed!
   clearError();
   console.log("Valid coordinate:", rawInput.toUpperCase());
 
   // ... call your Place Ship logic here ...
   // const gameboard = new Gameboard();
 
-  if (
-    !user.gameboard.filledCoordinates[ship.value].coords.includes(
-      coordInput.value.toUpperCase()
-    )
-  ) {
-    user.gameboard.placeShip(
-      ship.value,
-      coordInput.value.toUpperCase(),
-      orientation.value
-    );
-    for (let i = 0; i < ship.options.length; i++) {
-      if (ship.options[i].value === ship.value) {
-        ship.remove(i);
-        break;
-      }
+  user.gameboard.placeShip(
+    ship.value,
+    rawInput.toUpperCase(),
+    orientation.value
+  );
+  for (let i = 0; i < ship.options.length; i++) {
+    if (ship.options[i].value === ship.value) {
+      ship.remove(i);
+      break;
     }
-  } else {
   }
 
   if (ship.options.length === 0) {
@@ -91,6 +136,39 @@ function userPicksShips() {
   }
 
   // console.log(user.gameboard.filledCoordinates);
+}
+
+function willBecomeTaken(ship, coordinate, orientation) {
+  const arr = [];
+  if (orientation === "horizontal") {
+    for (let i = Number(coordinate.slice(1)); i < SHIP_LENGTHS[ship]; i++) {
+      if (
+        Object.keys(user.gameboard.filledCoordinates)
+          .map((ship) => user.gameboard.filledCoordinates[ship].coords)
+          .some((arr) => arr.includes(`${coordinate[0]}${i}`))
+      ) {
+        return true;
+      }
+    }
+  } else {
+    for (
+      let i = coordinate[0].charCodeAt(0);
+      i < coordinate[0].charCodeAt(0) + SHIP_LENGTHS[ship];
+      i++
+    ) {
+      if (
+        Object.keys(user.gameboard.filledCoordinates)
+          .map((ship) => user.gameboard.filledCoordinates[ship].coords)
+          .some((arr) =>
+            arr.includes(`${String.fromCharCode(i)}${coordinate.slice(1)}`)
+          )
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 function computerPicksShips() {
@@ -109,6 +187,21 @@ function computerPicksShips() {
     let orientation =
       orientationOptions[Math.floor(Math.random() * orientationOptions.length)];
 
+    while (!isPlacementValid(ship, coordinate, orientation)) {
+      coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
+      orientation =
+        orientationOptions[
+          Math.floor(Math.random() * orientationOptions.length)
+        ];
+    }
+
+    while (willBecomeTaken(ship, coordinate, orientation)) {
+      coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
+      orientation =
+        orientationOptions[
+          Math.floor(Math.random() * orientationOptions.length)
+        ];
+    }
     if (
       !computer.gameboard.filledCoordinates[ship].coords.includes(coordinate)
     ) {
@@ -132,22 +225,103 @@ function computerPicksShips() {
 coordInput.addEventListener("input", clearError);
 
 startBtn.addEventListener("click", () => {
-  computerPicksShips();
-  const userGameCells = [...document.querySelectorAll(".p-cell")];
-  const computerGameCells = [...document.querySelectorAll(".c-cell")];
+  if (!gameOver && startBtn.textContent !== "Restart Game") {
+    startBtn.textContent = "Restart Game";
+    computerPicksShips();
 
-  for (const cell of userGameCells) {
-    cell.addEventListener("click", () => {
-      user.gameboard.receiveAttack(cell.id);
-    });
-  }
+    const computerGameCells = [...document.querySelectorAll(".c-cell")];
 
-  for (const cell of computerGameCells) {
-    cell.addEventListener("click", () => {
-      computer.gameboard.receiveAttack(cell.id);
-    });
+    // for (const cell of userGameCells) {
+    //   cell.addEventListener("click", () => {
+    //     user.gameboard.receiveAttack(cell.id);
+    //   });
+    // }
+
+    for (const cell of computerGameCells) {
+      cell.addEventListener("click", () => {
+        if (turn === "user" && !gameOver) {
+          if (!document.querySelector(`.c-cell#${cell.id}`).textContent) {
+            checkForSink();
+            checkForWinner();
+            computer.gameboard.receiveAttack(cell.id);
+            turn = "computer";
+            setTimeout(() => computerAttacks(), 3000);
+          }
+        }
+      });
+    }
+  } else if (!gameOver && startBtn.textContent === "Restart Game") {
+    window.location.reload();
+  } else {
+    window.location.reload();
   }
 });
+
+function computerAttacks() {
+  checkForSink();
+  checkForWinner();
+  const userGameCells = [...document.querySelectorAll(".p-cell")];
+  const targetCell =
+    userGameCells[Math.floor(Math.random() * userGameCells.length)];
+  user.gameboard.receiveAttack(targetCell.id);
+  turn = "user";
+}
+
+function checkForSink() {
+  if (
+    Object.keys(user.gameboard.filledCoordinates).some(
+      (ship) =>
+        user.gameboard.filledCoordinates[ship].hits ===
+        user.gameboard.filledCoordinates[ship].length
+    )
+  ) {
+    const sunkShip = Object.keys(user.gameboard.filledCoordinates).findLast(
+      (ship) =>
+        user.gameboard.filledCoordinates[ship].hits ===
+        user.gameboard.filledCoordinates[ship].length
+    );
+    console.log(`User's ${sunkShip} has been sunk!`);
+  } else if (
+    Object.keys(computer.gameboard.filledCoordinates).some(
+      (ship) =>
+        computer.gameboard.filledCoordinates[ship].hits ===
+        computer.gameboard.filledCoordinates[ship].length
+    )
+  ) {
+    const sunkShip = Object.keys(computer.gameboard.filledCoordinates).findLast(
+      (ship) =>
+        computer.gameboard.filledCoordinates[ship].hits ===
+        computer.gameboard.filledCoordinates[ship].length
+    );
+    console.log(`Computer's ${sunkShip} has been sunk!`);
+  }
+}
+
+function checkForWinner() {
+  if (
+    Object.keys(user.gameboard.filledCoordinates).every(
+      (ship) =>
+        user.gameboard.filledCoordinates[ship].hits ===
+        user.gameboard.filledCoordinates[ship].length
+    )
+  ) {
+    console.log("User wins!");
+    gameOver = true;
+    startBtn.textContent = "Play Again";
+    startBtn.disabled = false;
+  } else if (
+    Object.keys(computer.gameboard.filledCoordinates).every(
+      (ship) =>
+        computer.gameboard.filledCoordinates[ship].hits ===
+        computer.gameboard.filledCoordinates[ship].length
+    )
+  ) {
+    console.log("Computer wins!");
+    gameOver = true;
+    startBtn.textContent = "Play Again";
+    startBtn.disabled = false;
+  }
+}
 
 // Function to create a 10x10 grid with labels
 function createGrid(containerId) {
