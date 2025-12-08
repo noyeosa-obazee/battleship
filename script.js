@@ -66,7 +66,9 @@ function userPicksShips() {
   // const gameboard = new Gameboard();
 
   if (
-    !user.gameboard.filledCoordinates.includes(coordInput.value.toUpperCase())
+    !user.gameboard.filledCoordinates[ship.value].coords.includes(
+      coordInput.value.toUpperCase()
+    )
   ) {
     user.gameboard.placeShip(
       ship.value,
@@ -107,7 +109,9 @@ function computerPicksShips() {
     let orientation =
       orientationOptions[Math.floor(Math.random() * orientationOptions.length)];
 
-    if (!computer.gameboard.filledCoordinates.includes(coordinate)) {
+    if (
+      !computer.gameboard.filledCoordinates[ship].coords.includes(coordinate)
+    ) {
       computer.gameboard.placeShip(ship, coordinate, orientation);
       for (let i = 0; i < shipOptions.length; i++) {
         if (shipOptions[i] === ship) {
@@ -165,6 +169,8 @@ function createGrid(containerId) {
         cell.addEventListener("click", () => {
           if (containerId === "opponent-grid") {
             computer.gameboard.receiveAttack(cell.id);
+          } else {
+            user.gameboard.receiveAttack(cell.id);
           }
         });
       }

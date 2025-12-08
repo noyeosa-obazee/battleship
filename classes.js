@@ -11,6 +11,7 @@ class Ship {
         : this.type === "destroyer"
         ? 2
         : null;
+    this.coords = [];
     this.hits = 0;
     this.hasBeenSunk = false;
   }
@@ -35,7 +36,13 @@ class Gameboard {
       ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     ];
-    this.filledCoordinates = [];
+    this.filledCoordinates = {
+      carrier: new Ship("carrier"),
+      battleship: new Ship("battleship"),
+      cruiser: new Ship("cruiser"),
+      submarine: new Ship("submarine"),
+      destroyer: new Ship("destroyer"),
+    };
     this.missedShots = [];
     // this.ship = new Ship("cruiser");
   }
@@ -55,7 +62,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 5;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.carrier.coords.push(`${coordinate[0]}${i}`);
+            // this.player.ships[ship].coords.push(`${coordinate[0]}${i}`);
+
             const targetCell = document.getElementById(`${coordinate[0]}${i}`);
             targetCell.textContent = "●";
             targetCell.classList.add("ship-cell");
@@ -66,7 +75,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 4;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.battleship.coords.push(
+              `${coordinate[0]}${i}`
+            );
             const targetCell = document.getElementById(`${coordinate[0]}${i}`);
             targetCell.textContent = "●";
             targetCell.classList.add("ship-cell");
@@ -77,7 +88,7 @@ class Gameboard {
             i < Number(coordinate[1]) + 3;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.cruiser.coords.push(`${coordinate[0]}${i}`);
             const targetCell = document.getElementById(`${coordinate[0]}${i}`);
             targetCell.textContent = "●";
             targetCell.classList.add("ship-cell");
@@ -88,7 +99,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 3;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.submarine.coords.push(
+              `${coordinate[0]}${i}`
+            );
             const targetCell = document.getElementById(`${coordinate[0]}${i}`);
             targetCell.textContent = "●";
             targetCell.classList.add("ship-cell");
@@ -99,7 +112,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 2;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.destroyer.coords.push(
+              `${coordinate[0]}${i}`
+            );
             const targetCell = document.getElementById(`${coordinate[0]}${i}`);
             targetCell.textContent = "●";
             targetCell.classList.add("ship-cell");
@@ -112,7 +127,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 5;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.carrier.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
             const targetCell = document.getElementById(
@@ -127,7 +142,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 4;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.battleship.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
             const targetCell = document.getElementById(
@@ -144,7 +159,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 3;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.cruiser.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
             const targetCell = document.getElementById(
@@ -161,7 +176,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 3;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.submarine.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
             const targetCell = document.getElementById(
@@ -178,7 +193,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 2;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.destroyer.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
             const targetCell = document.getElementById(
@@ -202,7 +217,7 @@ class Gameboard {
             i < Number(coordinate[1]) + 5;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.carrier.coords.push(`${coordinate[0]}${i}`);
           }
         } else if (selectedShip.type === "battleship") {
           for (
@@ -210,7 +225,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 4;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.battleship.coords.push(
+              `${coordinate[0]}${i}`
+            );
           }
         } else if (selectedShip.type === "cruiser") {
           for (
@@ -218,7 +235,7 @@ class Gameboard {
             i < Number(coordinate[1]) + 3;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.cruiser.coords.push(`${coordinate[0]}${i}`);
           }
         } else if (selectedShip.type === "submarine") {
           for (
@@ -226,7 +243,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 3;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.submarine.coords.push(
+              `${coordinate[0]}${i}`
+            );
           }
         } else if (selectedShip.type === "destroyer") {
           for (
@@ -234,7 +253,9 @@ class Gameboard {
             i < Number(coordinate[1]) + 2;
             i++
           ) {
-            this.filledCoordinates.push(`${coordinate[0]}${i}`);
+            this.filledCoordinates.destroyer.coords.push(
+              `${coordinate[0]}${i}`
+            );
           }
         }
       } else {
@@ -244,7 +265,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 5;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.carrier.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
           }
@@ -254,7 +275,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 4;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.battleship.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
           }
@@ -266,7 +287,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 3;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.cruiser.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
           }
@@ -278,7 +299,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 3;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.submarine.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
           }
@@ -290,7 +311,7 @@ class Gameboard {
             i < coordinate[0].charCodeAt(0) + 2;
             i++
           ) {
-            this.filledCoordinates.push(
+            this.filledCoordinates.destroyer.coords.push(
               `${String.fromCharCode(i)}${coordinate.slice(1)}`
             );
           }
@@ -300,18 +321,50 @@ class Gameboard {
   }
 
   receiveAttack(coordinate) {
-    if (this.filledCoordinates.includes(coordinate)) {
-      // this.ship.hit();
-      const hitCell = document.querySelector(`.c-cell#${coordinate}`);
-      hitCell.textContent = "✖";
-      hitCell.style.color = "red";
+    if (this.player === "user") {
+      console.log(objectTargetKey(this.filledCoordinates, coordinate));
+      if (
+        this.filledCoordinates[
+          objectTargetKey(this.filledCoordinates, coordinate)
+        ]
+      ) {
+        // this.ship.hit();
+        const hitCell = document.querySelector(`.p-cell#${coordinate}`);
+        hitCell.textContent = "✖";
+        hitCell.style.color = "red";
+      } else {
+        this.missedShots.push(coordinate);
+        const missedCell = document.querySelector(`.p-cell#${coordinate}`);
+        missedCell.textContent = "m";
+        missedCell.style.color = "#d3d3d3";
+      }
     } else {
-      this.missedShots.push(coordinate);
-      const missedCell = document.querySelector(`.c-cell#${coordinate}`);
-      missedCell.textContent = "m";
-      missedCell.style.color = "#d3d3d3";
+      if (
+        this.filledCoordinates[
+          objectTargetKey(this.filledCoordinates, coordinate)
+        ]
+      ) {
+        // this.ship.hit();
+        const hitCell = document.querySelector(`.c-cell#${coordinate}`);
+        hitCell.textContent = "✖";
+        hitCell.style.color = "red";
+      } else {
+        this.missedShots.push(coordinate);
+        const missedCell = document.querySelector(`.c-cell#${coordinate}`);
+        missedCell.textContent = "m";
+        missedCell.style.color = "#d3d3d3";
+      }
     }
   }
+}
+
+function objectTargetKey(obj, value) {
+  for (const key in obj) {
+    if (obj[key].coords.includes(value)) {
+      return key;
+    }
+  }
+  return null;
 }
 
 class Player {
