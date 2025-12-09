@@ -189,10 +189,10 @@ function computerPicksShips() {
 
     while (!isPlacementValid(ship, coordinate, orientation)) {
       coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
-      orientation =
-        orientationOptions[
-          Math.floor(Math.random() * orientationOptions.length)
-        ];
+      // orientation =
+      //   orientationOptions[
+      //     Math.floor(Math.random() * orientationOptions.length)
+      //   ];
     }
 
     while (willBecomeTaken(ship, coordinate, orientation)) {
@@ -286,11 +286,13 @@ function checkForSink() {
         user.gameboard.filledCoordinates[ship].length
     )
   ) {
-    const sunkShip = Object.keys(user.gameboard.filledCoordinates).findLast(
-      (ship) =>
-        user.gameboard.filledCoordinates[ship].hits ===
-        user.gameboard.filledCoordinates[ship].length
-    );
+    const sunkShip = Object.keys(user.gameboard.filledCoordinates)
+      .filter(
+        (ship) =>
+          user.gameboard.filledCoordinates[ship].hits ===
+          user.gameboard.filledCoordinates[ship].length
+      )
+      .at(-1);
     console.log(`User's ${sunkShip} has been sunk!`);
   } else if (
     Object.keys(computer.gameboard.filledCoordinates).some(
@@ -299,11 +301,13 @@ function checkForSink() {
         computer.gameboard.filledCoordinates[ship].length
     )
   ) {
-    const sunkShip = Object.keys(computer.gameboard.filledCoordinates).findLast(
-      (ship) =>
-        computer.gameboard.filledCoordinates[ship].hits ===
-        computer.gameboard.filledCoordinates[ship].length
-    );
+    const sunkShip = Object.keys(computer.gameboard.filledCoordinates)
+      .filter(
+        (ship) =>
+          computer.gameboard.filledCoordinates[ship].hits ===
+          computer.gameboard.filledCoordinates[ship].length
+      )
+      .at(-1);
     console.log(`Computer's ${sunkShip} has been sunk!`);
   }
 }
