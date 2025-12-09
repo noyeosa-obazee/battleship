@@ -44,7 +44,6 @@ class Gameboard {
       destroyer: new Ship("destroyer"),
     };
     this.missedShots = [];
-    // this.ship = new Ship("cruiser");
   }
 
   placeShip(ship, coordinate, orientation) {
@@ -52,8 +51,6 @@ class Gameboard {
       const cell = document.getElementById(coordinate);
       const selectedShip = new Ship(ship);
 
-      // cell.textContent = "●";
-      // cell.classList.add("ship-cell");
       console.log(selectedShip.type);
       if (orientation === "horizontal") {
         if (selectedShip.type === "carrier") {
@@ -63,7 +60,6 @@ class Gameboard {
             i++
           ) {
             this.filledCoordinates.carrier.coords.push(`${coordinate[0]}${i}`);
-            // this.player.ships[ship].coords.push(`${coordinate[0]}${i}`);
 
             const targetCell = document.getElementById(`${coordinate[0]}${i}`);
             targetCell.textContent = "●";

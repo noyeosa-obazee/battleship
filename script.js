@@ -39,7 +39,7 @@ const user = new Player("user");
 const computer = new Player("computer");
 let turn = "user";
 let gameOver = false;
-// 1. The Validation Function
+
 function validateCoordinate(input) {
   const regex = /^[A-Ja-j](10|[1-9])$/;
 
@@ -49,13 +49,11 @@ function validateCoordinate(input) {
   return true;
 }
 
-// 2. The Helper to Show/Hide Errors
 function showError(message) {
   errorMsg.textContent = message;
   errorMsg.style.display = "inline";
   coordInput.classList.add("input-invalid");
 
-  // Remove the red border after 2 seconds to be nice
   setTimeout(() => {
     coordInput.classList.remove("input-invalid");
   }, 2000);
@@ -67,7 +65,6 @@ function clearError() {
   coordInput.classList.remove("input-invalid");
 }
 
-// 3. Connect it to the Button
 placeBtn.addEventListener("click", () => {
   userPicksShips();
 });
@@ -75,13 +72,11 @@ placeBtn.addEventListener("click", () => {
 function userPicksShips() {
   const rawInput = coordInput.value.trim();
 
-  // Step A: Check if it is empty
   if (!rawInput) {
     showError("Please enter a coordinate!");
     return;
   }
 
-  // Step B: Check format (A1 - J10)
   if (!validateCoordinate(rawInput)) {
     showError("Invalid! Use A-J and 1-10 (e.g., A5)");
     return;
@@ -112,12 +107,8 @@ function userPicksShips() {
     return;
   }
 
-  // Step C: If its valid, proceed!
   clearError();
   console.log("Valid coordinate:", rawInput.toUpperCase());
-
-  // ... call your Place Ship logic here ...
-  // const gameboard = new Gameboard();
 
   user.gameboard.placeShip(
     ship.value,
@@ -136,8 +127,6 @@ function userPicksShips() {
     controlsContainer.classList.add("hidden-controls");
     ship.classList.add("vanish");
   }
-
-  // console.log(user.gameboard.filledCoordinates);
 }
 
 function willBecomeTaken(ship, coordinate, orientation) {
