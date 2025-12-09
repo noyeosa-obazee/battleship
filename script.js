@@ -186,8 +186,11 @@ function computerPicksShips() {
 
       const isOutOfBounds = !isPlacementValid(ship, coordinate, orientation);
       const isCollision = willBecomeTaken(ship, coordinate, orientation);
+      const isTaken = Object.keys(computer.gameboard.filledCoordinates)
+        .map((ship) => computer.gameboard.filledCoordinates[ship].coords)
+        .some((arr) => arr.includes(coordinate));
 
-      if (!isOutOfBounds && !isCollision) {
+      if (!isTaken && !isOutOfBounds && !isCollision) {
         valid = true;
       }
     }
@@ -212,6 +215,11 @@ function computerPicksShips() {
 }
 
 coordInput.addEventListener("input", clearError);
+coordInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    userPicksShips();
+  }
+});
 
 startBtn.addEventListener("click", () => {
   if (!gameOver && startBtn.textContent !== "Restart Game") {
@@ -277,33 +285,27 @@ function computerAttacks() {
 function checkForSink() {
   if (
     Object.keys(user.gameboard.filledCoordinates).some(
-      (ship) =>
-        user.gameboard.filledCoordinates[ship].hits ===
-        user.gameboard.filledCoordinates[ship].length
+      (ship) => user.gameboard.filledCoordinates[ship].hasBeenSunk === true
     )
   ) {
     const sunkShip = Object.keys(user.gameboard.filledCoordinates)
       .filter(
-        (ship) =>
-          user.gameboard.filledCoordinates[ship].hits ===
-          user.gameboard.filledCoordinates[ship].length
+        (ship) => user.gameboard.filledCoordinates[ship].hasBeenSunk === true
       )
       .at(-1);
+
     console.log(`User's ${sunkShip} has been sunk!`);
     infoGiver.classList.remove("hidden-controls");
     infoGiver.textContent = `Your ${sunkShip} has been sunk!`;
   } else if (
     Object.keys(computer.gameboard.filledCoordinates).some(
-      (ship) =>
-        computer.gameboard.filledCoordinates[ship].hits ===
-        computer.gameboard.filledCoordinates[ship].length
+      (ship) => computer.gameboard.filledCoordinates[ship].hasBeenSunk === true
     )
   ) {
     const sunkShip = Object.keys(computer.gameboard.filledCoordinates)
       .filter(
         (ship) =>
-          computer.gameboard.filledCoordinates[ship].hits ===
-          computer.gameboard.filledCoordinates[ship].length
+          computer.gameboard.filledCoordinates[ship].hasBeenSunk === true
       )
       .at(-1);
     console.log(`Computer's ${sunkShip} has been sunk!`);
@@ -314,23 +316,19 @@ function checkForSink() {
 
 function checkForWinner() {
   if (
-    Object.keys(user.gameboard.filledCoordinates).every(
-      (ship) =>
-        user.gameboard.filledCoordinates[ship].hits ===
-        user.gameboard.filledCoordinates[ship].length
+    Object.keys(computer.gameboard.filledCoordinates).every(
+      (ship) => computer.gameboard.filledCoordinates[ship].hasBeenSunk === true
     )
   ) {
     console.log("User wins!");
-    infoGiver.textContent = "Yout win!";
+    infoGiver.textContent = "You win!";
     gameOver = true;
     startBtn.textContent = "Play Again";
     startBtn.disabled = false;
     turnTeller.textContent = "";
   } else if (
-    Object.keys(computer.gameboard.filledCoordinates).every(
-      (ship) =>
-        computer.gameboard.filledCoordinates[ship].hits ===
-        computer.gameboard.filledCoordinates[ship].length
+    Object.keys(user.gameboard.filledCoordinates).every(
+      (ship) => user.gameboard.filledCoordinates[ship].hasBeenSunk === true
     )
   ) {
     console.log("Computer wins!");
