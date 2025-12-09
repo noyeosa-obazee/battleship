@@ -261,9 +261,20 @@ function computerAttacks() {
   checkForSink();
   checkForWinner();
   const userGameCells = [...document.querySelectorAll(".p-cell")];
-  const targetCell =
-    userGameCells[Math.floor(Math.random() * userGameCells.length)];
+  const notValidCells = userGameCells
+    .filter(
+      (cell) =>
+        document.querySelector(`.p-cell#${cell.id}`).textContent &&
+        document.querySelector(`.p-cell#${cell.id}`).textContent !== "●"
+    )
+    .map((cell) => cell.id);
+  const validCells = userGameCells.filter(
+    (cell) => !notValidCells.includes(cell.id)
+  );
+  let targetCell = validCells[Math.floor(Math.random() * validCells.length)];
+
   user.gameboard.receiveAttack(targetCell.id);
+
   turn = "user";
 }
 
