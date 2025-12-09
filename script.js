@@ -5,6 +5,8 @@ const placeBtn = document.getElementById("place-ship-btn");
 const ship = document.getElementById("ship-select");
 const startBtn = document.getElementById("start-btn");
 const controlsContainer = document.querySelector(".controls-container");
+const turnTeller = document.getElementById("turn-teller");
+const infoGiver = document.getElementById("info-giver");
 import { Player } from "./classes.js";
 import { allCoords } from "./allCoords.js";
 
@@ -183,25 +185,24 @@ function computerPicksShips() {
   const orientationOptions = ["horizontal", "vertical"];
   for (let i = 0; i < 5; i++) {
     let ship = shipOptions[0];
-    let coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
-    let orientation =
-      orientationOptions[Math.floor(Math.random() * orientationOptions.length)];
+    let coordinate, orientation;
+    let valid = false;
 
-    while (!isPlacementValid(ship, coordinate, orientation)) {
-      coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
-      // orientation =
-      //   orientationOptions[
-      //     Math.floor(Math.random() * orientationOptions.length)
-      //   ];
-    }
-
-    while (willBecomeTaken(ship, coordinate, orientation)) {
+    while (!valid) {
       coordinate = allCoords[Math.floor(Math.random() * allCoords.length)];
       orientation =
         orientationOptions[
           Math.floor(Math.random() * orientationOptions.length)
         ];
+
+      const isOutOfBounds = !isPlacementValid(ship, coordinate, orientation);
+      const isCollision = willBecomeTaken(ship, coordinate, orientation);
+
+      if (!isOutOfBounds && !isCollision) {
+        valid = true;
+      }
     }
+
     if (
       !computer.gameboard.filledCoordinates[ship].coords.includes(coordinate)
     ) {
@@ -221,35 +222,41 @@ function computerPicksShips() {
   console.log(computer.gameboard.filledCoordinates);
 }
 
-// Optional: Clear error when user starts typing again
 coordInput.addEventListener("input", clearError);
 
 startBtn.addEventListener("click", () => {
   if (!gameOver && startBtn.textContent !== "Restart Game") {
+    turnTeller.textContent = "Your turn";
     startBtn.textContent = "Restart Game";
     computerPicksShips();
 
     const computerGameCells = [...document.querySelectorAll(".c-cell")];
 
-    // for (const cell of userGameCells) {
-    //   cell.addEventListener("click", () => {
-    //     user.gameboard.receiveAttack(cell.id);
-    //   });
-    // }
-
     for (const cell of computerGameCells) {
       cell.addEventListener("click", () => {
         if (turn === "user" && !gameOver) {
           if (!document.querySelector(`.c-cell#${cell.id}`).textContent) {
+            turnTeller.textContent = "Your turn";
+
+            computer.gameboard.receiveAttack(cell.id);
             checkForSink();
             checkForWinner();
-            computer.gameboard.receiveAttack(cell.id);
             turn = "computer";
-            setTimeout(() => computerAttacks(), 3000);
+            turnTeller.textContent = "Computer's turn";
+            wait(3000)
+              .then(() => {
+                computerAttacks();
+                return wait(0);
+              })
+              .then(() => {
+                turnTeller.textContent = "Your turn";
+              });
           }
         }
       });
     }
+
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   } else if (!gameOver && startBtn.textContent === "Restart Game") {
     window.location.reload();
   } else {
@@ -258,8 +265,6 @@ startBtn.addEventListener("click", () => {
 });
 
 function computerAttacks() {
-  checkForSink();
-  checkForWinner();
   const userGameCells = [...document.querySelectorAll(".p-cell")];
   const notValidCells = userGameCells
     .filter(
@@ -274,6 +279,8 @@ function computerAttacks() {
   let targetCell = validCells[Math.floor(Math.random() * validCells.length)];
 
   user.gameboard.receiveAttack(targetCell.id);
+  checkForSink();
+  checkForWinner();
 
   turn = "user";
 }
@@ -294,6 +301,8 @@ function checkForSink() {
       )
       .at(-1);
     console.log(`User's ${sunkShip} has been sunk!`);
+    infoGiver.classList.remove("hidden-controls");
+    infoGiver.textContent = `Your ${sunkShip} has been sunk!`;
   } else if (
     Object.keys(computer.gameboard.filledCoordinates).some(
       (ship) =>
@@ -309,6 +318,8 @@ function checkForSink() {
       )
       .at(-1);
     console.log(`Computer's ${sunkShip} has been sunk!`);
+    infoGiver.classList.remove("hidden-controls");
+    infoGiver.textContent = `Computer\'s ${sunkShip} has been sunk!`;
   }
 }
 
@@ -321,9 +332,11 @@ function checkForWinner() {
     )
   ) {
     console.log("User wins!");
+    infoGiver.textContent = "Yout win!";
     gameOver = true;
     startBtn.textContent = "Play Again";
     startBtn.disabled = false;
+    turnTeller.textContent = "";
   } else if (
     Object.keys(computer.gameboard.filledCoordinates).every(
       (ship) =>
@@ -332,41 +345,32 @@ function checkForWinner() {
     )
   ) {
     console.log("Computer wins!");
+    infoGiver.textContent = "Computer wins!";
     gameOver = true;
     startBtn.textContent = "Play Again";
     startBtn.disabled = false;
+    turnTeller.textContent = "";
   }
 }
 
-// Function to create a 10x10 grid with labels
 function createGrid(containerId) {
   const gridContainer = document.getElementById(containerId);
   const gridSize = 10;
 
-  // Loop to create 11 rows (1 label row and 10 game rows)
   for (let i = 0; i <= gridSize; i++) {
-    // Loop to create 11 columns (1 label col and 10 game cols)
     for (let j = 0; j <= gridSize; j++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
 
-      // 1. Top-left empty corner
       if (i === 0 && j === 0) {
         cell.classList.add("empty-cell");
-      }
-      // 2. Top row labels (1-10)
-      else if (i === 0) {
+      } else if (i === 0) {
         cell.textContent = j;
         cell.classList.add("label-cell");
-      }
-      // 3. Left column labels (A-J)
-      else if (j === 0) {
-        // Use ASCII code to get letters: A is 65
+      } else if (j === 0) {
         cell.textContent = String.fromCharCode(64 + i);
         cell.classList.add("label-cell");
-      }
-      // 4. The actual game board cells
-      else {
+      } else {
         cell.classList.add("game-cell");
 
         cell.classList.add(containerId === "player-grid" ? "p-cell" : "c-cell");

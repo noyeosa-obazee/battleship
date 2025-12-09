@@ -61,6 +61,18 @@ body {
   border: none;
 }
 
+#info-giver.hidden-controls {
+  opacity: 0;
+  transform: scale(0.95) translateY(-20px); /* Shrinks and moves up slightly */
+  pointer-events: none; /* Prevents clicking while invisible */
+
+  /* This makes it effectively take up no space after fading */
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
