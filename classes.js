@@ -1,3 +1,5 @@
+import { infoGiver } from "./script.js";
+
 class Ship {
   constructor(type) {
     this.type = type;
@@ -336,7 +338,8 @@ class Gameboard {
         hitCell.textContent = "✖";
         hitCell.style.color = "red";
         if (targetShip.hasBeenSunk) {
-          console.log(targetShip.type + " has been sunk");
+          infoGiver.classList.remove("hidden-controls");
+          infoGiver.textContent = "Your " + targetShip.type + " has been sunk";
         }
       } else {
         this.missedShots.push(coordinate);
@@ -360,7 +363,9 @@ class Gameboard {
           hitCell.textContent = "✖";
           hitCell.style.color = "red";
           if (targetShip.hasBeenSunk) {
-            console.log(targetShip.type + " has been sunk");
+            infoGiver.classList.remove("hidden-controls");
+            infoGiver.textContent =
+              "Opponent's " + targetShip.type + " has been sunk";
           }
         } else {
           this.missedShots.push(coordinate);

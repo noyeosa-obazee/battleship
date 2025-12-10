@@ -6,7 +6,7 @@ const ship = document.getElementById("ship-select");
 const startBtn = document.getElementById("start-btn");
 const controlsContainer = document.querySelector(".controls-container");
 const turnTeller = document.getElementById("turn-teller");
-const infoGiver = document.getElementById("info-giver");
+export const infoGiver = document.getElementById("info-giver");
 import { Player } from "./classes.js";
 import { allCoords } from "./allCoords.js";
 
@@ -236,17 +236,17 @@ startBtn.addEventListener("click", () => {
             turnTeller.textContent = "Your turn";
 
             computer.gameboard.receiveAttack(cell.id);
-            checkForSink();
+
             checkForWinner();
             turn = "computer";
-            turnTeller.textContent = "Computer's turn";
+            turnTeller.textContent = "Opponent's turn";
             wait(3000)
               .then(() => {
                 computerAttacks();
                 return wait(0);
               })
               .then(() => {
-                turnTeller.textContent = "Your turn";
+                if (!gameOver) turnTeller.textContent = "Your turn";
               });
           }
         }
@@ -276,42 +276,10 @@ function computerAttacks() {
   let targetCell = validCells[Math.floor(Math.random() * validCells.length)];
 
   user.gameboard.receiveAttack(targetCell.id);
-  checkForSink();
+
   checkForWinner();
 
   turn = "user";
-}
-
-function checkForSink() {
-  if (
-    Object.keys(user.gameboard.filledCoordinates).some(
-      (ship) => user.gameboard.filledCoordinates[ship].hasBeenSunk === true
-    )
-  ) {
-    const sunkShip = Object.keys(user.gameboard.filledCoordinates)
-      .filter(
-        (ship) => user.gameboard.filledCoordinates[ship].hasBeenSunk === true
-      )
-      .at(-1);
-
-    console.log(`User's ${sunkShip} has been sunk!`);
-    infoGiver.classList.remove("hidden-controls");
-    infoGiver.textContent = `Your ${sunkShip} has been sunk!`;
-  } else if (
-    Object.keys(computer.gameboard.filledCoordinates).some(
-      (ship) => computer.gameboard.filledCoordinates[ship].hasBeenSunk === true
-    )
-  ) {
-    const sunkShip = Object.keys(computer.gameboard.filledCoordinates)
-      .filter(
-        (ship) =>
-          computer.gameboard.filledCoordinates[ship].hasBeenSunk === true
-      )
-      .at(-1);
-    console.log(`Computer's ${sunkShip} has been sunk!`);
-    infoGiver.classList.remove("hidden-controls");
-    infoGiver.textContent = `Computer\'s ${sunkShip} has been sunk!`;
-  }
 }
 
 function checkForWinner() {
