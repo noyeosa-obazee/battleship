@@ -205,9 +205,6 @@ class Gameboard {
     } else {
       const selectedShip = new Ship(ship);
 
-      // cell.textContent = "●";
-      // cell.classList.add("ship-cell");
-      console.log(selectedShip.type);
       if (orientation === "horizontal") {
         if (selectedShip.type === "carrier") {
           for (
@@ -339,7 +336,7 @@ class Gameboard {
         hitCell.style.color = "red";
         if (targetShip.hasBeenSunk) {
           infoGiver.classList.remove("hidden-controls");
-          infoGiver.textContent = "Your " + targetShip.type + " has been sunk";
+          infoGiver.textContent = "Your " + targetShip.type + " has been sunk!";
         }
       } else {
         this.missedShots.push(coordinate);
@@ -365,7 +362,7 @@ class Gameboard {
           if (targetShip.hasBeenSunk) {
             infoGiver.classList.remove("hidden-controls");
             infoGiver.textContent =
-              "Opponent's " + targetShip.type + " has been sunk";
+              "Opponent's " + targetShip.type + " has been sunk!";
           }
         } else {
           this.missedShots.push(coordinate);

@@ -211,7 +211,6 @@ function computerPicksShips() {
     if (shipOptions.length === 0) {
     }
   }
-  console.log(computer.gameboard.filledCoordinates);
 }
 
 coordInput.addEventListener("input", clearError);
