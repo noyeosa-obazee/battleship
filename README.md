@@ -1,6 +1,8 @@
 # Battleship 🚢
 
-A browser-based implementation of the classic strategy game Battleship. Built with vanilla JavaScript using Test-Driven Development (TDD) principles.
+[🔴 **Play the Live Demo**] (https://noyeosa-obazee.github.io/battleship/)
+
+A browser-based implementation of the classic strategy game Battleship. Built with HTML, CSS and Vanilla JS.
 
 ## 📝 About
 
@@ -23,9 +25,3 @@ This project was created as part of The Odin Project curriculum. The goal was to
 
 - **Smart AI:** Currently, the computer attacks random legal coordinates. I plan to implement a "Hunt & Target" algorithm so the AI attacks adjacent squares after scoring a hit.
 - **Drag & Drop:** Allowing users to drag ships onto the grid instead of typing coordinates.
-
-## 💻 How to Run
-
-1.  Clone the repository.
-2.  Open `index.html` in your browser.
-3.  Place your ships and start the battle!
