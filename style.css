@@ -7,6 +7,8 @@
   --yellow-border-color: #e6b800;
   --bg-color: #f0f8ff;
   --text-color: #333;
+
+  --cell-size: 35px;
 }
 
 body {
@@ -18,6 +20,10 @@ body {
   align-items: center;
   margin: 0;
   padding: 20px;
+
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .main-title {
@@ -25,9 +31,9 @@ body {
   margin-bottom: 30px;
   text-transform: uppercase;
   letter-spacing: 2px;
+  text-align: center;
+  line-height: 1.1;
 }
-
-/* Add this after your .main-title styles */
 
 .controls-container {
   background-color: white;
@@ -35,38 +41,27 @@ body {
   border-radius: 15px;
   border: 3px solid var(--blue-border-color);
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   align-items: center;
   margin-bottom: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease;
-
-  /* This ensures it starts fully visible */
   opacity: 1;
   transform: scale(1) translateY(0);
-  max-height: 500px; /* Large enough to fit content */
-  overflow: hidden; /* Needed for the height animation */
+  max-height: 500px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 800px;
 }
 
-.controls-container.hidden-controls {
-  opacity: 0;
-  transform: scale(0.95) translateY(-20px); /* Shrinks and moves up slightly */
-  pointer-events: none; /* Prevents clicking while invisible */
-
-  /* This makes it effectively take up no space after fading */
-  max-height: 0;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-
+.controls-container.hidden-controls,
 #info-giver.hidden-controls {
   opacity: 0;
-  transform: scale(0.95) translateY(-20px); /* Shrinks and moves up slightly */
-  pointer-events: none; /* Prevents clicking while invisible */
-
-  /* This makes it effectively take up no space after fading */
+  transform: scale(0.95) translateY(-20px);
+  pointer-events: none;
   max-height: 0;
   margin: 0;
   padding: 0;
@@ -101,61 +96,54 @@ input {
 
 .vanish {
   opacity: 0;
-  transform: scale(0); /* Shrinks down to nothing */
-  max-height: 0; /* Collapses the vertical space */
-  max-width: 0; /* Collapses the horizontal space */
-  margin: 0; /* Removes spacing */
+  transform: scale(0);
+  max-height: 0;
+  max-width: 0;
+  margin: 0;
   padding: 0;
-  pointer-events: none; /* Stops it from being clickable while fading */
-
-  /* The magic transition */
+  pointer-events: none;
   transition: all 0.5s ease-out;
 }
-/* Add this class to make the input border red when wrong */
+
 .input-invalid {
   border-color: #ff4444 !important;
   background-color: #fff0f0 !important;
   animation: shake 0.3s;
 }
 
-/* The error text style */
 .error-msg {
   color: #ff4444;
   font-size: 0.9rem;
   font-weight: bold;
-  min-height: 1.2rem; /* Keeps space so layout doesn't jump */
+  min-height: 1.2rem;
   margin-top: 5px;
+  text-align: center;
 }
 
 #coord-error {
   display: none;
 }
 
-/* A cool "Shake" animation */
 @keyframes shake {
-  0% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  25% {
+  25%,
+  75% {
     transform: translateX(-5px);
   }
   50% {
     transform: translateX(5px);
   }
-  75% {
-    transform: translateX(-5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-input {
-  width: 60px; /* Small width for A1 inputs */
-  text-align: center;
-  text-transform: uppercase; /* Forces A1 instead of a1 */
 }
 
-/* Button Styling */
+input {
+  width: 60px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 #place-ship-btn {
   font-family: "Patrick Hand", cursive, sans-serif;
   font-size: 1em;
@@ -166,7 +154,7 @@ input {
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 20px; /* Aligns with inputs */
+  margin-top: 20px;
   transition: background-color 0.2s, transform 0.1s;
 }
 
@@ -183,6 +171,7 @@ input {
   display: flex;
   gap: 50px;
   margin-bottom: 40px;
+  justify-content: center;
 }
 
 .board-section {
@@ -200,61 +189,51 @@ input {
   font-size: 1.5rem;
 }
 
-/* Theme-specific styles */
 .blue-theme .board-title {
   background-color: var(--blue-theme-color);
   border-color: var(--blue-border-color);
 }
-
 .blue-theme .grid-container {
   border: 3px solid var(--blue-border-color);
 }
-
 .blue-theme .label-cell {
   background-color: var(--blue-theme-color);
 }
-
 .yellow-theme .board-title {
   background-color: var(--yellow-theme-color);
   border-color: var(--yellow-border-color);
 }
-
 .yellow-theme .grid-container {
   border: 3px solid var(--yellow-border-color);
 }
-
 .yellow-theme .label-cell {
   background-color: var(--yellow-theme-color);
 }
 
-/* Grid Styles */
 .grid-container {
   display: grid;
-  /* 11x11 grid: 1 row/col for labels + 10 for game cells */
-  grid-template-columns: repeat(11, 35px);
-  grid-template-rows: repeat(11, 35px);
+  grid-template-columns: repeat(11, var(--cell-size));
+  grid-template-rows: repeat(11, var(--cell-size));
   background-color: white;
 }
 
 .cell {
-  width: 35px;
-  height: 35px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   border: 1px solid #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.1rem;
+  font-size: calc(var(--cell-size) * 0.5);
 }
 
 .label-cell {
   font-weight: bold;
 }
-
 .empty-cell {
   border: none;
   background-color: transparent;
 }
-
 .game-cell {
   cursor: pointer;
   background-color: white;
@@ -262,16 +241,16 @@ input {
 .game-cell:hover {
   background-color: #f0f0f0;
 }
-
 .ship-cell {
   background-color: #f0f0f0;
 }
 
-/* Legend Styles */
 .legend {
   display: flex;
   gap: 40px;
   font-size: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .legend-item {
@@ -294,21 +273,18 @@ input {
   width: 25px;
   height: 25px;
 }
-
 .hit-marker {
   color: red;
   font-weight: bold;
   font-size: 2rem;
 }
-
 .boats-marker {
   font-weight: bold;
   letter-spacing: 5px;
   width: auto;
 }
-
 .miss-marker {
-  background-color: #d3d3d3; /* Light grey */
+  background-color: #d3d3d3;
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -319,13 +295,13 @@ input {
   font-size: 1.3rem;
   font-weight: bold;
   color: white;
-  background-color: #4caf50; /* Green for GO */
+  background-color: #4caf50;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 20px;
-  margin-left: 10px; /* Space between buttons */
+  margin-left: 10px;
   transition: all 0.2s;
 }
 
@@ -333,46 +309,47 @@ input {
   background-color: #45a049;
   transform: scale(1.05);
 }
-
 #start-btn:active:not(:disabled) {
   transform: scale(0.95);
 }
-
-/* The "You can't click me yet" style */
 #start-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
   opacity: 0.7;
   transform: none;
 }
-#start-btn {
-  font-family: "Patrick Hand", cursive, sans-serif;
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: white;
-  background-color: #4caf50; /* Green for GO */
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-left: 10px; /* Space between buttons */
-  transition: all 0.2s;
+
+@media (max-width: 900px) {
+  .game-container {
+    flex-direction: column;
+    gap: 40px;
+  }
 }
 
-#start-btn:hover:not(:disabled) {
-  background-color: #45a049;
-  transform: scale(1.05);
+@media (max-width: 480px) {
+  :root {
+    --cell-size: 28px;
+  }
+
+  .controls-container {
+    padding: 15px;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .main-title {
+    font-size: 2.2rem;
+  }
+
+  #place-ship-btn,
+  #start-btn {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
-#start-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-/* The "You can't click me yet" style */
-#start-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.7;
-  transform: none;
+@media (max-width: 350px) {
+  :root {
+    --cell-size: 25px;
+  }
 }

@@ -108,7 +108,6 @@ function userPicksShips() {
   }
 
   clearError();
-  console.log("Valid coordinate:", rawInput.toUpperCase());
 
   user.gameboard.placeShip(
     ship.value,
@@ -121,6 +120,7 @@ function userPicksShips() {
       break;
     }
   }
+  coordInput.value = "";
 
   if (ship.options.length === 0) {
     startBtn.disabled = false;
